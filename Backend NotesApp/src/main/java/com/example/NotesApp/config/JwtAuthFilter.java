@@ -16,12 +16,11 @@ import java.io.IOException;
 
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
+    private final CustomUserDetailsService userDetailsService;
 
-    private CustomUserDetailsService userDetailsService;
 
-
-    public JwtAuthFilter(JwtUtils jwtUtils,CustomUserDetailsService customUserDetailsService){
+    public JwtAuthFilter(JwtUtils jwtUtils, CustomUserDetailsService userDetailsService){
         this.jwtUtils=jwtUtils;
         this.userDetailsService=userDetailsService;
     }

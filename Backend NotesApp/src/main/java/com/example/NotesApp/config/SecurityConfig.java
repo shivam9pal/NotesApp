@@ -1,12 +1,13 @@
 package com.example.NotesApp.config;
 
-
 import com.example.NotesApp.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,12 +17,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    private JwtUtils jwtUtils;
-    private CustomUserDetailsService userDetailsService;
-    private AuthenticationProvider authenticationProvider;
+    private final JwtUtils jwtUtils;
+    private final CustomUserDetailsService userDetailsService;
 
 
     public SecurityConfig(JwtUtils jwtUtils, CustomUserDetailsService userDetailsService){
@@ -37,6 +37,15 @@ public class SecurityConfig {
     public PasswordEncoder  passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder()); // Direct call to the bean method
+        return provider;
+    }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception{
         return authConfig.getAuthenticationManager();
@@ -46,13 +55,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Modern way to disable CSRF
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**", "/api/notes/share", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login","/api/notes/share", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authenticationProvider(authenticationProvider)
+                .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

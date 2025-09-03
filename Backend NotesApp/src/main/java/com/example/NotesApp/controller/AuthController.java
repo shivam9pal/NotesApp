@@ -34,6 +34,11 @@ public class AuthController {
         this.passwordEncoder=passwordEncoder;
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Auth controller working!");
+    }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest req){

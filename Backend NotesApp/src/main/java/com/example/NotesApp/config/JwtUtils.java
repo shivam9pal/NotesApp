@@ -13,11 +13,10 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    //@Value("${app.jwtSecret}")
-    private String jwtSecret;
 
-    //@Value("")
-    private int jwtExpirationMs;
+    private String jwtSecret="my_super_secure_jwt_secret_key_2024!";
+
+    private int jwtExpirationMs=3600000;
 
     private Key getSigninKey(){
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
@@ -39,7 +38,7 @@ public class JwtUtils {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigninKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
