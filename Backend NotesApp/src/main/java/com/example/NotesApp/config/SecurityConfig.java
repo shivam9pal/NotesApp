@@ -3,6 +3,7 @@ package com.example.NotesApp.config;
 import com.example.NotesApp.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -55,7 +56,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Modern way to disable CSRF
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/register", "/api/auth/login","/api/notes/share", "/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login","/api/notes/share/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

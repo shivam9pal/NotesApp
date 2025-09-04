@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface NoteRepository extends JpaRepository<Note,Long> {
     Optional<Note> findByShareId(String shareId);
-    List<Note> findAllByUser(Users users);
+    List<Note> findAllByUserOrderByCreatedAtDesc(Users users);
 }

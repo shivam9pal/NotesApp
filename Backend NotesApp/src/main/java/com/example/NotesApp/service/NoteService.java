@@ -35,7 +35,7 @@ public class NoteService {
     }
 
     public List<Note> getAllForCurrentUSer(){
-        return noteRepository.findAllByUser(getCurrentUser());
+        return noteRepository.findAllByUserOrderByCreatedAtDesc(getCurrentUser());
     }
     public Note getById(Long id){
         Note note=noteRepository.findById(id).orElseThrow(()->new RuntimeException("Note not Found"));
