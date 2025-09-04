@@ -33,7 +33,7 @@ export default function Dashboard() {
   const shareNote = async (id) => {
     try {
       const res = await api.post(`/notes/${id}/share`);
-      const link = `${window.location.origin}/share/${res.data.shareId}`;
+      let link = `${window.location.origin}/share/${res.data.shareId}`;
 
       try {
         await navigator.clipboard.writeText(link);
