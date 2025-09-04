@@ -60,7 +60,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://notesapp-production-1c3e.up.railway.app")
+                        .allowedOrigins("https://namekartnote.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             }
         };
