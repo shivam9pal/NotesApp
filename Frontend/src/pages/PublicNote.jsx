@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axiosConfig";
 import { Container, Typography, Box, Paper, Chip } from "@mui/material";
 
 export default function PublicNote() {
@@ -14,7 +14,7 @@ export default function PublicNote() {
       setLoadingTimeout(true);
     }, 6000);
 
-    axios.get(`http://localhost:8080/api/notes/share/${id}`)
+    api.get(`/notes/share/${id}`)
       .then((res) => {
         clearTimeout(timeoutId);
         setNote(res.data);
@@ -120,7 +120,7 @@ export default function PublicNote() {
           />
         </Box>
         
-        {}
+        
         <Paper
           elevation={0}
           sx={{
@@ -133,11 +133,10 @@ export default function PublicNote() {
             wordWrap: 'break-word',
             boxShadow: '0 20px 40px rgba(32, 178, 170, 0.3), 0 8px 16px rgba(0,0,0,0.1)',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.2)',
-            
+            border: '1px solid rgba(255,255,255,0.2)'
           }}
         >
-          {}
+          
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5 }}>
             <Typography 
               variant="h6" 
@@ -216,7 +215,7 @@ export default function PublicNote() {
             </Box>
           </Box>
           
-          {}
+          
           <Typography 
             variant="body1" 
             sx={{ 
@@ -232,14 +231,14 @@ export default function PublicNote() {
           </Typography>
         </Paper>
         
-        {/* Footer */}
+        
         <Box sx={{ textAlign: 'center', mt: 4 }}>
           <Typography 
             variant="caption" 
             sx={{ 
               color: 'rgba(255,255,255,0.8)',
               fontSize: '0.85rem',
-              fontWeight: 500,
+              fontWeight: 300,
               textShadow: '0 1px 2px rgba(0,0,0,0.1)'
             }}
           >

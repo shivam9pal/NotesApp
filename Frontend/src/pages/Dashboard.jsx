@@ -33,13 +33,13 @@ export default function Dashboard() {
   const shareNote = async (id) => {
     try {
       const res = await api.post(`/notes/${id}/share`);
-      const link = `http://localhost:5173/share/${res.data.shareId}`;
+      const link = `${window.location.origin}/share/${res.data.shareId}`;
 
       try {
         await navigator.clipboard.writeText(link);
         toast.success("Share link copied to clipboard");
       } catch (copyErr) {
-        link = `http://localhost:5173/share/${res.data.shareId}`;
+        link = `${window.location.origin}/share/${res.data.shareId}`;
         toast.info(link);
       }
     } catch (error) {
@@ -58,7 +58,7 @@ export default function Dashboard() {
     if (window.confirm(confirmMessage)) {
       try {
         await api.delete(`/notes/${id}`);
-        // Remove the note from the local state
+        
         setNotes(notes.filter(note => note.id !== id));
         toast.success("Note deleted successfully!");
       } catch (error) {
@@ -67,7 +67,7 @@ export default function Dashboard() {
           return;
         }
         if (error.code === 'ERR_NETWORK') {
-          toast.error("Network Error: Please check if the backend server is running on port 8080");
+          toast.error("Network Error: Please check if the  server is running ?");
         } else if (error.response) {
           toast.error(`Failed to delete note: ${error.response.data.message || 'Unknown error'}`);
         } else {
