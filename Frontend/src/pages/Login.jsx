@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -13,14 +14,15 @@ export default function Login() {
     try {
       const res = await api.post("/auth/login", { username, password });
       localStorage.setItem("token", res.data.token);
+      toast.success("Logged in successfully");
       navigate("/dashboard");
     } catch (error) {
       if (error.code === 'ERR_NETWORK') {
-        alert("Network Error: Please check if the backend server is running on port 8080");
+        toast.error("Network Error: Please check if the backend server is running on port 8080");
       } else if (error.response) {
-        alert(`Login failed: ${error.response.data.message || 'Invalid credentials'}`);
+        toast.error(`Login failed: ${error.response.data.message || 'Invalid credentials'}`);
       } else {
-        alert(`Login failed: ${error.message || 'Invalid credentials'}`);
+        toast.error(`Login failed: ${error.message || 'Invalid credentials'}`);
       }
     }
   };

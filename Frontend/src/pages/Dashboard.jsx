@@ -2,17 +2,28 @@ import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { Container, Button, Typography, Card, CardContent, Box, AppBar, Toolbar } from "@mui/material";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
+
+  const handleAuthExpired = () => {
+    localStorage.removeItem("token");
+    toast.info("Session expired. Please log in again.");
+    navigate("/login");
+  };
 
   useEffect(() => {
     api.get("/notes")
       .then((res) => setNotes(res.data))
       .catch((error) => {
         if (error.code === 'ERR_NETWORK') {
-          alert("Network Error: Please check if the backend server is running on port 8080");
+          handleAuthExpired();
+          return;
+        }
+        if (error.response && error.response.status === 401) {
+          toast.error("Network Error: Please check if the backend server is running on port 8080");
         } else {
           console.error("Failed to fetch notes:", error);
         }
@@ -22,12 +33,20 @@ export default function Dashboard() {
   const shareNote = async (id) => {
     try {
       const res = await api.post(`/notes/${id}/share`);
-      alert(`Public link: http://localhost:5173/share/${res.data.shareId}`);
+      const link = `http://localhost:5173/share/${res.data.shareId}`;
+
+      try {
+        await navigator.clipboard.writeText(link);
+        toast.success("Share link copied to clipboard");
+      } catch (copyErr) {
+        link = `http://localhost:5173/share/${res.data.shareId}`;
+        toast.info(link);
+      }
     } catch (error) {
       if (error.code === 'ERR_NETWORK') {
-        alert("Network Error: Please check if the backend server is running on port 8080");
+        toast.error("Network Error: Please check if the backend server is running on port 8080");
       } else {
-        alert(`Failed to share note: ${error.message || 'Unknown error'}`);
+        toast.error(`Failed to share note: ${error.message || 'Unknown error'}`);
       }
     }
   };
@@ -41,14 +60,18 @@ export default function Dashboard() {
         await api.delete(`/notes/${id}`);
         // Remove the note from the local state
         setNotes(notes.filter(note => note.id !== id));
-        alert("Note deleted successfully!");
+        toast.success("Note deleted successfully!");
       } catch (error) {
+        if (error.response && error.response.status === 401) {
+          handleAuthExpired();
+          return;
+        }
         if (error.code === 'ERR_NETWORK') {
-          alert("Network Error: Please check if the backend server is running on port 8080");
+          toast.error("Network Error: Please check if the backend server is running on port 8080");
         } else if (error.response) {
-          alert(`Failed to delete note: ${error.response.data.message || 'Unknown error'}`);
+          toast.error(`Failed to delete note: ${error.response.data.message || 'Unknown error'}`);
         } else {
-          alert(`Failed to delete note: ${error.message || 'Unknown error'}`);
+          toast.error(`Failed to delete note: ${error.message || 'Unknown error'}`);
         }
       }
     }
@@ -57,6 +80,7 @@ export default function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
+    toast.info("Logged out");
   };
 
   return (
@@ -64,7 +88,7 @@ export default function Dashboard() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Notes App
+            NameKart.Note
           </Typography>
           <Button color="inherit" onClick={handleLogout}>
             Logout

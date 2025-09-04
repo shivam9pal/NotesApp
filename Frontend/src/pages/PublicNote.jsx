@@ -9,7 +9,7 @@ export default function PublicNote() {
   const [loadingTimeout, setLoadingTimeout] = useState(false);
 
   useEffect(() => {
-    // Set a timeout for 6 seconds
+    
     const timeoutId = setTimeout(() => {
       setLoadingTimeout(true);
     }, 6000);
@@ -25,7 +25,7 @@ export default function PublicNote() {
         setLoadingTimeout(true);
       });
 
-    // Cleanup timeout on component unmount
+    
     return () => clearTimeout(timeoutId);
   }, [id]);
 

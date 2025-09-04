@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { toast } from "react-toastify";
 
 export default function NoteEditor() {
   const { id } = useParams();
@@ -20,19 +21,19 @@ export default function NoteEditor() {
         .catch((error) => {
           setLoading(false);
           if (error.code === 'ERR_NETWORK') {
-            alert("Network Error: Please check if the backend server is running on port 8080");
+            toast.error("Network Error: Please check if the backend server is running on port 8080");
           } else if (error.response) {
             if (error.response.status === 403) {
-              alert("Access denied: You don't have permission to view this note. Redirecting to dashboard.");
+              toast.error("Access denied: You don't have permission to view this note.");
               navigate("/dashboard");
             } else if (error.response.status === 404) {
-              alert("Note not found. Redirecting to dashboard.");
+              toast.error("Note not found.");
               navigate("/dashboard");
             } else {
-              alert(`Failed to load note: ${error.response.data.message || error.message}`);
+              toast.error(`Failed to load note: ${error.response.data.message || error.message}`);
             }
           } else {
-            alert(`Failed to load note: ${error.message || 'Unknown error'}`);
+            toast.error(`Failed to load note: ${error.message || 'Unknown error'}`);
           }
         });
     }
@@ -42,23 +43,26 @@ export default function NoteEditor() {
     try {
       if (id) {
         await api.put(`/notes/${id}`, note);
+        toast.success("Note updated");
       } else {
         await api.post("/notes", note);
+        toast.success("Note created");
       }
       navigate("/dashboard");
     } catch (error) {
       if (error.code === 'ERR_NETWORK') {
-        alert("Network Error: Please check if the backend server is running on port 8080");
+        toast.error("Network Error: Please check if the backend server is running on port 8080");
       } else if (error.response) {
-        alert(`Error: ${error.response.data.message || 'Failed to save note'}`);
+        toast.error(`Error: ${error.response.data.message || 'Failed to save note'}`);
       } else {
-        alert(`Error: ${error.message || 'Failed to save note'}`);
+        toast.error(`Error: ${error.message || 'Failed to save note'}`);
       }
     }
   };
 
   const handleCancel = () => {
     navigate("/dashboard");
+    toast.info("Changes discarded");
   };
 
   if (loading) {

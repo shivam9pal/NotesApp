@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -12,15 +13,15 @@ export default function Register() {
     e.preventDefault();
     try {
       await api.post("/auth/register", { username, password });
-      alert("User registered! Please login.");
+      toast.success("User registered! Please login.");
       navigate("/login");
     } catch (error) {
       if (error.code === 'ERR_NETWORK') {
-        alert("Network Error: Please check if the backend server is running on port 8080");
+        toast.error("Network Error: Please check if the backend server is running on port 8080");
       } else if (error.response) {
-        alert(`Registration failed: ${error.response.data.message || 'Username already exists'}`);
+        toast.error(`Registration failed: ${error.response.data.message || 'Username already exists'}`);
       } else {
-        alert(`Registration failed: ${error.message || 'Username already exists'}`);
+        toast.error(`Registration failed: ${error.message || 'Username already exists'}`);
       }
     }
   };
