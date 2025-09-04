@@ -1,0 +1,4 @@
+DB_USERNAME=example
+DB_PASSWORD=example@12345
+JWT_SECRET="your secret key!"
+JWT_EXPIRATION_MS="Milli seconds"
