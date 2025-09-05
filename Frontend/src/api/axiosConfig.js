@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://13.234.123.100:8080/api",
+  baseURL: "https://cors-anywhere.herokuapp.com/http://13.234.123.100:8080/api",
 });
 
 api.interceptors.request.use((config) => {
