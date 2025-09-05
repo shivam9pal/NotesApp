@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://notesapp-production-9060.up.railway.app/api",
+  baseURL: "http://13.234.123.100:8080/api/",
 });
 
 api.interceptors.request.use((config) => {
