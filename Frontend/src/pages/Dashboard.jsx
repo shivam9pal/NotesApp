@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
-import { Container, Button, Typography, Card, CardContent, Box } from "@mui/material";
+import { Container, Button, Typography, Card, CardContent, Box, AppBar, Toolbar } from "@mui/material";
 import { toast } from "react-toastify";
 
 
@@ -15,15 +15,21 @@ export default function Dashboard() {
     navigate("/login");
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+    toast.info("Logged out");
+  };
+
   useEffect(() => {
     api.get("/notes")
       .then((res) => setNotes(res.data))
       .catch((error) => {
-        if (error.code === 'ERR_NETWORK') {
+        if (error.response && error.response.status === 401) {
           handleAuthExpired();
           return;
         }
-        if (error.response && error.response.status === 401) {
+        if (error.code === 'ERR_NETWORK') {
           toast.error("Network Error: Please check if the backend server is running on port 8080");
         } else {
           console.error("Failed to fetch notes:", error);
