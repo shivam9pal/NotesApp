@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
-import { Container, Button, Typography, Card, CardContent, Box, AppBar, Toolbar } from "@mui/material";
+import { Container, Button, Typography, Card, CardContent, Box } from "@mui/material";
 import { toast } from "react-toastify";
+
 
 export default function Dashboard() {
   const [notes, setNotes] = useState([]);
@@ -75,12 +76,6 @@ export default function Dashboard() {
         }
       }
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-    toast.info("Logged out");
   };
 
   return (

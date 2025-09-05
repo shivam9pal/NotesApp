@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axiosConfig";
-import { Container, Typography, Box, Paper, Chip } from "@mui/material";
+import { Container, Typography, Box, Paper, Chip, AppBar, Toolbar } from "@mui/material";
 
 export default function PublicNote() {
   const { id } = useParams();
@@ -31,15 +31,23 @@ export default function PublicNote() {
 
   if (!note) {
     return (
-      <Box 
-        sx={{ 
-          minHeight: '100vh', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          backgroundColor: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
-        }}
-      >
+      <>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              NameKart.Note
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Box 
+          sx={{ 
+            minHeight: '100vh', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            backgroundColor: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
+          }}
+        >
         <Box
           sx={{
             display: 'flex',
@@ -90,21 +98,30 @@ export default function PublicNote() {
             </>
           )}
         </Box>
-      </Box>
+        </Box>
+      </>
     );
   }
 
   return (
-    <Box 
-      sx={{ 
-        minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        p: 2
-      }}
-    >
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            NameKart.Note
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Box 
+        sx={{ 
+          minHeight: '100vh', 
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2
+        }}
+      >
       <Container maxWidth="sm">
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
           <Chip 
@@ -246,6 +263,7 @@ export default function PublicNote() {
           </Typography>
         </Box>
       </Container>
-    </Box>
+      </Box>
+    </>
   );
 }

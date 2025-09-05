@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { Container, TextField, Button, Typography, Box, AppBar, Toolbar } from "@mui/material";
 import { toast } from "react-toastify";
 
 export default function Register() {
@@ -27,11 +27,19 @@ export default function Register() {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box mt={10} p={4} boxShadow={3} borderRadius={2}>
-        <Typography variant="h5" gutterBottom>
-          Register
-        </Typography>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            NameKart.Note
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="sm">
+        <Box mt={10} p={4} boxShadow={3} borderRadius={2}>
+          <Typography variant="h5" gutterBottom>
+            Register
+          </Typography>
         <form onSubmit={handleRegister}>
           <TextField
             label="Username"
@@ -56,6 +64,7 @@ export default function Register() {
           </Button>
         </form>
       </Box>
-    </Container>
+      </Container>
+    </>
   );
 }

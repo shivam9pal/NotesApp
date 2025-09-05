@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axiosConfig";
 import { useNavigate, useParams } from "react-router-dom";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { Container, TextField, Button, Typography, Box, AppBar, Toolbar } from "@mui/material";
 import { toast } from "react-toastify";
 
 export default function NoteEditor() {
@@ -67,16 +67,33 @@ export default function NoteEditor() {
 
   if (loading) {
     return (
-      <Container maxWidth="sm">
-        <Box mt={5}>
-          <Typography variant="h5">Loading note...</Typography>
-        </Box>
-      </Container>
+      <>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              NameKart.Note
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Container maxWidth="sm">
+          <Box mt={5}>
+            <Typography variant="h5">Loading note...</Typography>
+          </Box>
+        </Container>
+      </>
     );
   }
 
   return (
-    <Container maxWidth="sm">
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            NameKart.Note
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="sm">
       <Box mt={5}>
         <Typography variant="h5">{id ? "Edit Note" : "Create Note"}</Typography>
         <TextField
@@ -104,6 +121,7 @@ export default function NoteEditor() {
           </Button>
         </Box>
       </Box>
-    </Container>
+      </Container>
+    </>
   );
 }
