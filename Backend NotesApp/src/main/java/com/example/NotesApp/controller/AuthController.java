@@ -37,6 +37,11 @@ public class AuthController {
 
 
 
+    @PostMapping("/test-register")
+    public ResponseEntity<String> testRegister() {
+        return ResponseEntity.ok("Test endpoint works!");
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest req){
         if(userRepository.existsByUsername(req.username())){
